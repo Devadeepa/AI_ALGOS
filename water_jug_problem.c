@@ -1,20 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
 #define MAX_SIZE 1000
-
 typedef struct State {
     int jug1, jug2;
     int f, g, h;
     struct State* parent;
 } State;
-
 typedef struct PriorityQueue {
     State* states[MAX_SIZE];
     int size;
 } PriorityQueue;
-
 State* createState(int j1, int j2, int g, int target, State* p) {
     State* s = (State*)malloc(sizeof(State));
     s->jug1 = j1;
@@ -25,7 +21,6 @@ State* createState(int j1, int j2, int g, int target, State* p) {
     s->parent = p;
     return s;
 }
-
 void insertPQ(PriorityQueue* pq, State* s) {
     int i = pq->size++;
     while (i > 0 && pq->states[(i-1)/2]->f > s->f) {
@@ -34,7 +29,6 @@ void insertPQ(PriorityQueue* pq, State* s) {
     }
     pq->states[i] = s;
 }
-
 State* removePQ(PriorityQueue* pq) {
     State* min = pq->states[0];
     State* last = pq->states[--pq->size];
@@ -50,7 +44,6 @@ State* removePQ(PriorityQueue* pq) {
     pq->states[i] = last;
     return min;
 }
-
 bool isVisited(State** visited, int visitedSize, State* s) {
     for (int i = 0; i < visitedSize; i++) {
         if (visited[i]->jug1 == s->jug1 && visited[i]->jug2 == s->jug2)
@@ -58,15 +51,14 @@ bool isVisited(State** visited, int visitedSize, State* s) {
     }
     return false;
 }
-
 void printPath(State* s) {
     if (!s) return;
     printPath(s->parent);
     printf("(%d, %d)\n", s->jug1, s->jug2);
 }
-
 void solvePuzzle(int capacity1, int capacity2, int target) {
-    PriorityQueue pq = {.size = 0};
+   PriorityQueue pq;
+pq.size = 0;
     State* visited[MAX_SIZE];
     int visitedSize = 0;
     
@@ -140,7 +132,6 @@ void solvePuzzle(int capacity1, int capacity2, int target) {
     
     printf("No solution found!\n");
 }
-
 int main() {
     int jug1_capacity = 4;
     int jug2_capacity = 3;
